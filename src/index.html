@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+  <title>Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="calculator-container">
+    <!-- Top toolbar -->
+    <header class="toolbar">
+      <div class="mode-toggles">
+        <button id="btn-mode-std" class="pill-btn active" title="Standard Mode">Standard</button>
+        <button id="btn-mode-sci" class="pill-btn" title="Scientific Mode">Scientific</button>
+      </div>
+      <div class="toolbar-actions">
+        <button id="btn-history-toggle" class="icon-btn" title="Calculation History" aria-label="History">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </button>
+        <button id="btn-copy" class="icon-btn" title="Copy result to clipboard" aria-label="Copy">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- History Drawer Overlay -->
+    <div id="history-drawer" class="history-drawer">
+      <div class="history-header">
+        <span>History</span>
+        <button id="btn-clear-history" class="text-btn">Clear</button>
+      </div>
+      <div id="history-list" class="history-list">
+        <div class="history-empty">No calculations yet</div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- Display Screen -->
+    <div class="display-area">
+      <div id="expression-display" class="expression-display"></div>
+      <div id="result-display" class="result-display">0</div>
+    </div>
+
+    <!-- Keypad -->
+    <div class="keypad-wrapper">
+      <!-- Scientific Row (toggled) -->
+      <div id="scientific-pad" class="keypad scientific-pad hidden">
+        <button class="key func-key" data-action="sin">sin</button>
+        <button class="key func-key" data-action="cos">cos</button>
+        <button class="key func-key" data-action="tan">tan</button>
+        <button class="key func-key" data-action="sqrt">√</button>
+
+        <button class="key func-key" data-action="log">log</button>
+        <button class="key func-key" data-action="ln">ln</button>
+        <button class="key func-key" data-action="square">x²</button>
+        <button class="key func-key" data-action="power">xʸ</button>
+
+        <button class="key func-key" data-action="pi">π</button>
+        <button class="key func-key" data-action="e">e</button>
+        <button class="key func-key" data-action="reciprocal">1/x</button>
+        <button class="key func-key" data-action="percent">%</button>
+      </div>
+
+      <!-- Main Standard Keypad -->
+      <div class="keypad standard-pad">
+        <button class="key action-key" data-action="all-clear">AC</button>
+        <button class="key action-key" data-action="clear-entry">C</button>
+        <button class="key action-key" data-action="backspace" title="Backspace">⌫</button>
+        <button class="key operator-key" data-action="divide" data-op="÷">÷</button>
+
+        <button class="key num-key" data-number="7">7</button>
+        <button class="key num-key" data-number="8">8</button>
+        <button class="key num-key" data-number="9">9</button>
+        <button class="key operator-key" data-action="multiply" data-op="×">×</button>
+
+        <button class="key num-key" data-number="4">4</button>
+        <button class="key num-key" data-number="5">5</button>
+        <button class="key num-key" data-number="6">6</button>
+        <button class="key operator-key" data-action="subtract" data-op="−">−</button>
+
+        <button class="key num-key" data-number="1">1</button>
+        <button class="key num-key" data-number="2">2</button>
+        <button class="key num-key" data-number="3">3</button>
+        <button class="key operator-key" data-action="add" data-op="+">+</button>
+
+        <button class="key num-key" data-action="negate">±</button>
+        <button class="key num-key" data-number="0">0</button>
+        <button class="key num-key" data-action="decimal">.</button>
+        <button class="key equals-key" data-action="calculate">=</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
