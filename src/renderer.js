@@ -10,6 +10,9 @@ const historyList = document.getElementById('history-list');
 const btnClearHistory = document.getElementById('btn-clear-history');
 const btnCopy = document.getElementById('btn-copy');
 const toast = document.getElementById('toast');
+const lanBar = document.getElementById('lan-bar');
+const lanText = document.getElementById('lan-text');
+const btnCopyLan = document.getElementById('btn-copy-lan');
 
 // Calculator State
 let currentInput = '0';
@@ -459,3 +462,49 @@ function highlightButton(selector) {
 
 // Initial display setup
 updateDisplay();
+
+// LAN Network Info Initialization
+let currentLanUrl = '';
+
+async function initNetworkInfo() {
+  if (window.electronAPI && window.electronAPI.getLanInfo) {
+    try {
+      const info = await window.electronAPI.getLanInfo();
+      currentLanUrl = info.url;
+      lanText.textContent = `LAN: ${info.url}`;
+      lanBar.style.display = 'flex';
+    } catch (e) {
+      console.warn('Failed to retrieve LAN info:', e);
+      lanText.textContent = 'LAN Active';
+    }
+  } else {
+    // Running in web browser over LAN
+    const currentHost = window.location.host;
+    if (currentHost) {
+      currentLanUrl = window.location.origin;
+      lanText.textContent = `Connected: ${currentHost}`;
+      btnCopyLan.textContent = 'Share Link';
+    } else {
+      lanBar.style.display = 'none';
+    }
+  }
+}
+
+if (btnCopyLan) {
+  btnCopyLan.addEventListener('click', async () => {
+    if (!currentLanUrl) return;
+    try {
+      if (window.electronAPI && window.electronAPI.copyToClipboard) {
+        await window.electronAPI.copyToClipboard(currentLanUrl);
+      } else {
+        await navigator.clipboard.writeText(currentLanUrl);
+      }
+      showToast('LAN link copied!');
+    } catch (err) {
+      console.error('Failed to copy LAN URL:', err);
+    }
+  });
+}
+
+initNetworkInfo();
+
